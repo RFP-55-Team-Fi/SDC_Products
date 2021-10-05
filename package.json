@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/RFP-55-Team-Fi/SDC_Products#readme",
   "dependencies": {
+    "eslint-config-hackreactor": "github:hackreactor-labs/eslint-config-hackreactor",
     "express": "^4.17.1",
     "nodemon": "^2.0.13",
     "pg": "^8.7.1",
