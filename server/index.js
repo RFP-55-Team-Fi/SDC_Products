@@ -25,6 +25,14 @@ app.get('/products/:product_id/styles', (req, res) => {
     .then((result) => res.end(JSON.stringify(result.rows[0])));
 });
 
+app.get('/products/:product_id/related', (req, res) => {
+
+  db.getRelated([req.params.product_id])
+    .then((results)=>res.end(JSON.stringify(results.rows[0].array_agg)))
+    .catch((err) => { console.error(err); res.sendStatus(404); });
+});
+
+
 const port = 3000;
 app.listen(port, function () {
   console.log(`Listening on port ${port}`);

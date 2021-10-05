@@ -15,10 +15,11 @@ pool.connect()
     console.log(err);
   });
 
-var getProducts = (params) => {
+const getProducts = (params) => {
   const query = {
     name: 'Pagination-products',
-    text: `SELECT * FROM products
+    text: `
+    SELECT * FROM products
     ORDER BY id
     OFFSET (($1 - 1) * $2) ROWS
     FETCH NEXT $2 ROWS ONLY`,
@@ -28,16 +29,20 @@ var getProducts = (params) => {
   return pool.query(query);
 };
 
-var getSingleProduct = (params) => {
+const getSingleProduct = (params) => {
   const query = {
     name: 'add-features-product',
-    text: 'SELECT products.id, products.name, products.slogan, products.description, products.category, products.default_price, (SELECT json_agg(x) from (SELECT feature, value from features where product_id=$1) x) as features from products where id=$1',
+    text: `
+    SELECT products.id, products.name, products.slogan, products.description, products.category, products.default_price,
+    (SELECT json_agg(x)
+    FROM (SELECT feature, value from features where product_id=$1) x) AS features
+    FROM products where id=$1`,
     values: params
   };
   return pool.query(query);
 };
 
-var getStyles = (params) => {
+const getStyles = (params) => {
   const query = {
     name: 'get-styles',
     text: `
@@ -77,10 +82,23 @@ var getStyles = (params) => {
   return pool.query(query);
 };
 
+const getRelated = (params) => {
+  const query = {
+    name: 'return-related-products',
+    text: `
+    SELECT array_agg(related_product_id)
+    FROM related
+    WHERE current_product_id=$1`,
+    values: params
+  };
+
+  return pool.query(query);
+};
 
 module.exports = {
   pool: pool,
   getProducts: getProducts,
   getSingleProduct: getSingleProduct,
-  getStyles: getStyles
+  getStyles: getStyles,
+  getRelated: getRelated
 };
