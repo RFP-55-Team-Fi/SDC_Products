@@ -19,6 +19,12 @@ app.get('/products/:product_id', (req, res) => {
 
 });
 
+app.get('/products/:product_id/styles', (req, res) => {
+
+  db.getStyles([req.params.product_id])
+    .then((result) => res.end(JSON.stringify(result.rows[0])));
+});
+
 const port = 3000;
 app.listen(port, function () {
   console.log(`Listening on port ${port}`);
