@@ -9,17 +9,18 @@ app.use(express.json());
 const cache = new nodeCache({ maxKeys: 100 });
 
 
-app.get('/products', async (req, res) => {
-  const { page = 5, count = 1 } = req.query;
+app.get('/products', (req, res) => {
+  const { page = 1, count = 5 } = req.query;
   let cacheKey = `/products?p=${page},c=${count}`;
 
   if (cache.has(cacheKey)) {
     res.status(200).send(cache.get(cacheKey));
   } else {
-    db.getProducts([page || 1, count || 5])
-    .then(products=>console.log(products.rows));
-    cache.set(cacheKey, products);
-    res.end(JSON.stringify((products.rows)));
+    db.getProducts([page, count])
+      .then((products) => {
+        cache.set(cacheKey, products.rows);
+        res.end(JSON.stringify((products.rows)));
+      });
   }
 });
 
