@@ -22,6 +22,7 @@
   "dependencies": {
     "eslint-config-hackreactor": "github:hackreactor-labs/eslint-config-hackreactor",
     "express": "^4.17.1",
+    "node-cache": "^5.1.2",
     "nodemon": "^2.0.13",
     "pg": "^8.7.1",
     "postgres": "^1.0.2"
